@@ -1,5 +1,7 @@
 package work.beltran.emojitalk
 
+import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.support.text.emoji.EmojiCompat
 import android.support.v7.app.AppCompatActivity
@@ -45,11 +47,12 @@ class MainActivity : AppCompatActivity() {
 
         Log.i("MainActivity", "Length of Emoji is $length")
 
+        val string = "Joy: $emoji\nDeveloper: $emoji2"
+
         // Takes some milliseconds to be ready
         // Docs: it takes approximately 150 milliseconds to initialize EmojiCompat.
         EmojiCompat.get().registerInitCallback (object : EmojiCompat.InitCallback() {
             override fun onInitialized() {
-                val string = "Joy: $emoji\nDeveloper: $emoji2"
                 val processed = EmojiCompat.get().process(string)
                 textView3.text = processed
             }
@@ -58,6 +61,12 @@ class MainActivity : AppCompatActivity() {
                 throwable?.printStackTrace()
             }
         })
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val typeface = Typeface.createFromAsset(assets, "fonts/emojione.ttf")
+            textView4.typeface = typeface
+            textView4.text = string
+        }
     }
 
     private fun getLengthUsingBreakIterator(emoji: String): Int {
